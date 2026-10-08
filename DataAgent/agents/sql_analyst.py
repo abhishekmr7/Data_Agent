@@ -255,6 +255,9 @@ sql_analyst = sql_agent_graph.compile()
 
 
 if __name__ == "__main__":
+    message = " ".join(sys.argv[1:])
+    if not message.strip():
+        message = input("Enter your question: ")
 
     # Optional: save the graph diagram (needs internet for mermaid rendering)
     try:
@@ -265,7 +268,15 @@ if __name__ == "__main__":
         print(f"Skipped graph image: {e}")
 
     input_schema = {
-        "user_question": "What are the different types of Payment Methods we have in our database",
+        "messages": [],
+        "user_question": message,
+        "curated_ques": "",
+        "prompt_query_context": "",
+        "generated_sql_query": "",
+        "is_safe": "No",
+        "comments": "",
+        "sql_query_execution_result": "",
+        "final_answer": ""
     }
 
     sql_analyst_response = sql_analyst.invoke(input_schema)

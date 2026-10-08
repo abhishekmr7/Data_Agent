@@ -38,14 +38,45 @@ class ETLTools:
             return f"Failed to extract data {e}"
 
 
-    s
+    def transform_Load(self,file_path:str):
+        """This tool Transforms the data from file_path and loads it into desired location(output_folder).
+        Args:
+            file_path (str): Location of the file to transform
+            output_folder (str): Location to load the transformed data
+            format (str): Format to save the transformed data (csv, json, parquet)
+        Returns:
+            str: Message indicating the success of the operation or failure
+        """
+        file_extension = os.path.splitext(file_path)[1].lower()
+        if file_extension == '.csv':
+            df = pd.read_csv(file_path)
+        elif file_extension == '.json':
+            df = pd.read_json(file_path)   
+        elif file_extension == '.parquet':
+            df = pd.read_parquet(file_path)
+        else:
+            return f"Unsupported file format: {file_extension}"
+
+        top3_rows = str(df.head(3))
+
+        return f"Data Successfully transformed. Top 3 rows:\n{top3_rows}"
 
 
+    def execute_function(self,code:str):
+        """This tool executes the function provided in the code string.
+        Args:
+            code (str): Code string containing the function to execute  
+        Returns:
+            str: Message indicating the success of the operation or failure
+        """
+        try:
+            exec(code)
+            return "Function executed successfully."
+        except Exception as e:
+            return f"Failed to execute function: {e}"
 
 if __name__ == "__main__":
     obj = ETLTools()
-    print(obj.extract_load("https://pokeapi.co/api/v2/pokemon/","data/extract","csv"))
+    path = "C:\\Ai-Projects\\DataAgent\\data\\extract\\Extracted_data.csv"
 
-            
-       
-
+    print(obj.transform_Load(path))
